@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:dw="http://www.mulesoft.org/schema/mule/ee/dw" xmlns:scripting="http://www.mulesoft.org/schema/mule/scripting" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:spring="http://www.springframework.org/schema/beans" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/dw http://www.mulesoft.org/schema/mule/ee/dw/current/dw.xsd
+http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mule/scripting/current/mule-scripting.xsd">
+    <http:listener-config name="HTTP_Listener_Configuration" host="localhost" port="8081" basePath="/api" doc:name="HTTP Listener Configuration"/>
+    <flow name="main">
+        <http:listener config-ref="HTTP_Listener_Configuration" path="/main" doc:name="HTTP"/>
+        <dw:transform-message doc:name="Transform Message">
+            <dw:set-payload><![CDATA[%dw 1.0
+%output application/java
+---
+[
+	'a',
+	'b',
+	'c',
+	'd'
+]]]></dw:set-payload>
+        </dw:transform-message>
+        <set-variable variableName="list" value="#[payload]" doc:name="Variable"/>
+        <component class="creatingmulecomponent.JavaClass" doc:name="Java"/>
+        <logger message="#[payload]" level="INFO" doc:name="Logger"/>
+    </flow>
+    <flow name="testFlow">
+        <logger message="&quot;SONO ENTRATO a :&quot; + #[System.currentTimeMillis()]" level="INFO" doc:name="Logger"/>
+        <set-payload value="#[payload.toUpperCase()]" doc:name="Set Payload"/>
+        <scripting:transformer doc:name="Groovy">
+            <scripting:script engine="Groovy"><![CDATA[java.util.List<String> list = flowVars.list;
+list.add(payload);
+flowVars.list = list;
+return message;]]></scripting:script>
+        </scripting:transformer>
+        <logger level="INFO" doc:name="Logger"/>
+    </flow>
+</mule>
