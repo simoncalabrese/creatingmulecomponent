@@ -8,17 +8,15 @@ import org.mule.api.MuleEventContext;
 import org.mule.construct.Flow;
 
 @SuppressWarnings("deprecation")
-public class SingleMessageExec implements Callable<MuleEvent> {
+public class SingleFlowThread implements Callable<MuleEvent>{
 
 	private MuleEventContext muleEventContext;
 	private MuleEvent actualEvent;
 	private String flowName;
-	private Object payload;
 
-	public SingleMessageExec(MuleEventContext muleEventContext, Object payload, String flowName) {
+	public SingleFlowThread(MuleEventContext muleEventContext, Object payload, String flowName) {
 		this.muleEventContext = muleEventContext;
 		this.actualEvent = DefaultMuleEvent.copy(org.mule.RequestContext.getEvent());
-		this.payload=payload;
 		actualEvent.getMessage().setPayload(payload);
 		this.flowName = flowName;
 	}
@@ -29,5 +27,4 @@ public class SingleMessageExec implements Callable<MuleEvent> {
 		MuleEvent event = flow.process((MuleEvent) actualEvent);
 		return event;
 	}
-
 }
