@@ -2,6 +2,7 @@ package creatingmulecomponent;
 
 import java.util.concurrent.Callable;
 
+import org.mule.DefaultMuleEvent;
 import org.mule.api.MuleEvent;
 import org.mule.api.MuleEventContext;
 import org.mule.construct.Flow;
@@ -16,7 +17,7 @@ public class SingleMessageExec implements Callable<MuleEvent> {
 
 	public SingleMessageExec(MuleEventContext muleEventContext, Object payload, String flowName) {
 		this.muleEventContext = muleEventContext;
-		this.actualEvent = org.mule.RequestContext.getEvent();
+		this.actualEvent = DefaultMuleEvent.copy(org.mule.RequestContext.getEvent());
 		this.payload=payload;
 		actualEvent.getMessage().setPayload(payload);
 		this.flowName = flowName;

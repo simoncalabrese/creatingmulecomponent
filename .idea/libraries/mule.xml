@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="mule">
+    <CLASSES>
+      <root url="file://$MAVEN_REPOSITORY$/mule" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
