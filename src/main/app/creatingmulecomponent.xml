@@ -28,7 +28,7 @@ http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mul
         <expression-component doc:name="Expression"><![CDATA[flowVars.list = payload;
 flowVars.flowToCall = 'testFlow';
 flowVars.counter = 1;]]></expression-component>
-        <component class="creatingmulecomponent.JavaClass" doc:name="Java"/>
+        <component class="creatingmulecomponent.ParallelForEach" doc:name="Java"/>
         <logger message="#[flowVars.list]" level="INFO" doc:name="Logger"/>
     </flow>
     <flow name="testFlow">
