@@ -1,4 +1,4 @@
-package creatingmulecomponent;
+package parallelForEach;
 
 public class ParallelForEachException extends Exception {
 
